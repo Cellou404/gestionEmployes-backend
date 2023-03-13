@@ -7,7 +7,7 @@ The goal of this project is to provide a fully fonctionnal api that will be used
 
 This project is written with django4 and python 3+.
 
-![A screenshot](project_screeshot1.png?raw=true "Title")
+![A screenshot](madia/sreenshot/project_screeshot1.png?raw=true "Title")
 
 ### Main features
 
