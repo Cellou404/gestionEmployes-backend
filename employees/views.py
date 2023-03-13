@@ -4,6 +4,7 @@ from rest_framework import permissions
 
 from .models import Employee
 from .serializers import EmployeeSerializer
+from .permissions import IsStaff
 
 
 # =========== Employee Create & Listing View =========== #
@@ -22,7 +23,7 @@ class EmployeeListView(ListCreateAPIView):
 
     Replace #slug by an employee slug
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = [IsStaff]
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     pagination_class = None
@@ -39,7 +40,7 @@ class EmployeeView(RetrieveUpdateDestroyAPIView):
 
     [ref]: http://localhost:8000/api/employees/
     """
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = [IsStaff]
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
     lookup_field = 'slug' # The lookup field is `slug` instead of `id`

@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import viewsets
-from rest_framework import permissions
+
 
 from .serializers import ProjectSerializer, ProjectTaskSerializer
 from .models import Project, ProjectTask
+from .permissions import IsOwner, IsStaff
 
 
 # ================= Project VIEW ================= # 
@@ -21,7 +22,7 @@ class ProjectView(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsOwner | IsStaff]
     lookup_field = 'slug'
 
     def perform_create(self, serializer):
@@ -47,7 +48,7 @@ class ProjectTaskCreateView(generics.CreateAPIView):
     """
     queryset = ProjectTask.objects.all()
     serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsOwner | IsStaff]
 
     """ 
         This method is used to perform creation for fields that 
@@ -67,7 +68,7 @@ class ProjectTaskListView(generics.ListAPIView):
 
     """
     serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsOwner | IsStaff]
     lookup_field = 'slug'
 
     def get_queryset(self):
@@ -83,5 +84,5 @@ class ProjectTaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = ProjectTask.objects.all()
     serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsOwner | IsStaff]
 
