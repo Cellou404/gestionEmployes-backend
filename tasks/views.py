@@ -20,7 +20,7 @@ class TasksListView(ListCreateAPIView):
 
     """
     queryset = Task.objects.all().order_by('-created')
-    permission_classes = [IsStaff | IsOwner]
+    permission_classes = [IsOwner| IsStaff]
     serializer_class = TaskSerializer
     lookup_field = 'slug'
 
@@ -40,7 +40,7 @@ class TaskDetailView(RetrieveUpdateDestroyAPIView):
 
     """
     queryset = Task.objects.all().order_by('-created')
-    permission_classes = [IsStaff | IsOwner]
+    permission_classes = [IsOwner| IsStaff]
     serializer_class = TaskSerializer
     lookup_field = 'slug'
 
