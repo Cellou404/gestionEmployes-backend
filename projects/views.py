@@ -1,10 +1,12 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 
 from .serializers import ProjectSerializer, ProjectTaskSerializer
 from .models import Project, ProjectTask
+from .permissions import IsOwner, IsStaff, IsTaskOwner
 
 
 # ================= Project VIEW ================= # 
@@ -21,53 +23,33 @@ class ProjectView(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.AllowAny, ]
+    permission_classes = [IsOwner | IsStaff]
     lookup_field = 'slug'
 
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
     
 
-# ================= ProjectTask Create VIEW ================= # 
-class ProjectTaskCreateView(generics.CreateAPIView):
-    """
-    Creatin a model instance.
-    Create **project tasks** in the database.
-
-    For creation [see here][ref].
-
-    [ref]: http://localhost:8000/api/projects/`project-slug`/project-task-create/
-
-    Replace `project-slug` by particular project slug since the lookup field is `slug`
-
-    Or [see here][ref].
-
-    [ref]: .views.py
-
-    """
-    queryset = ProjectTask.objects.all()
-    serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny, ]
-
-    """ 
-        This method is used to perform creation for fields that 
-        will be automaticaly populated
-    """
-    def perform_create(self, serializer):
-        slug = self.kwargs.get('slug')
-        project = get_object_or_404(Project, slug=slug)
-        serializer.save(project=project)
 
 # ================= ProjectTask List VIEW ================= # 
-class ProjectTaskListView(generics.ListAPIView):
+class ProjectTaskView(generics.ListCreateAPIView):
     """
     Returns a list of all **project tasks list** from the database.
     
     Each project can have mutiple task that have to be completed
 
+    Creatin a model instance.
+    Create **project tasks** in the database.
+
+    For creation [see here][ref].
+
+    [ref]: http://localhost:8000/api/projects/`project-slug`/
+
+    Replace `project-slug` by particular project slug since the lookup field is `slug`
+
     """
     serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsOwner | IsAdminUser]
     lookup_field = 'slug'
 
     def get_queryset(self):
@@ -83,5 +65,5 @@ class ProjectTaskUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = ProjectTask.objects.all()
     serializer_class = ProjectTaskSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsTaskOwner | IsStaff]
 

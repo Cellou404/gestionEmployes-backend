@@ -1,6 +1,5 @@
 # gestionEmployes-backend
 
-
 # Introduction
 
 The goal of this project is to provide a fully fonctionnal api that will be used in a __front-end__ framework
@@ -9,7 +8,7 @@ This project is written with django4 and python 3+.
 
 ![A screenshot](media/screenshot/project_screeshot1.png?raw=true "Title")
 
-### Main features
+## Main features
 
 * accounts app with custom user model
 

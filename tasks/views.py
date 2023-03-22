@@ -4,6 +4,8 @@ from rest_framework import permissions
 
 from .models import Task
 from .serializers import TaskSerializer
+from .permissions import IsStaff, IsOwner
+
 
 class TasksListView(ListCreateAPIView):
     """
@@ -18,7 +20,7 @@ class TasksListView(ListCreateAPIView):
 
     """
     queryset = Task.objects.all().order_by('-created')
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = [IsOwner| IsStaff]
     serializer_class = TaskSerializer
     lookup_field = 'slug'
 
@@ -38,7 +40,7 @@ class TaskDetailView(RetrieveUpdateDestroyAPIView):
 
     """
     queryset = Task.objects.all().order_by('-created')
-    permission_classes = (permissions.AllowAny, )
+    permission_classes = [IsOwner| IsStaff]
     serializer_class = TaskSerializer
     lookup_field = 'slug'
 
